@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Microservices Demo: Sock Shop</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="/assets/css/custom.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+<div class="header-home"><a href="/">Sock Shop</a></div>
+<nav>
+  <ul class="nav header-nav">
+    <li class=""><a href="/docs/quickstart.html">Quickstart</a></li>
+    <li class="active"><a href="/docs/index.html">Docs</a></li>
+    <li class=""><a href="/api/index.html">API</a></li>
+    <li><a href="https://github.com/microservices-demo" target="_blank">GitHub</a></li>
+  </ul>
+</nav>
+</div>
+
+
+      <div class="inner">
+        <h1>Documentation</h1>
+
+        <div class="row">
+          <div class="col-sm-3">
+            <ul class="docs-menu">
+  <li><a href="/docs/">Introduction</a></li>
+  <li><a href="/docs/load-test.html">Load Test</a></li>
+  <li><a href="/docs/user-accounts.html">User Accounts</a></li>
+</ul>
+<ul class="docs-menu">
+  <li><span>Docker</span>
+    <ul>
+      <li><a href="/deployment/docker-compose.html">Docker Compose</a></li>
+      <li><a href="/deployment/docker-compose-weave.html">Docker Compose + Weave</a></li>
+      <li><a href="/deployment/docker-swarm.html">Docker Swarm</a></li>
+      <li><a href="/deployment/micro-sock.html">Micro Sock</a></li>
+    </ul>
+  </li>
+  <li><span>Kubernetes</span>
+    <ul>
+      <li><a href="/deployment/kubernetes-start.html">Any Kubernetes Cluster</a></li>
+      <li><a href="/deployment/kubernetes-minikube.html">Minikube</a></li>
+      <li><a href="/deployment/kubernetes.html">Kubernetes + Weave on AWS</a></li>
+    </ul>
+  </li>
+  <li>
+    <span>Amazon ECS</span>
+    <ul>
+      <li><a href="/deployment/ecs.html">ECS</a></li>
+      <li><a href="/deployment/ecs-weave-shippable.html">ECS + Weave + Shippable</a></li>
+    </ul>
+  </li>
+  <li><span>Mesos</span>
+    <ul>
+      <li><a href="/deployment/mesos-cni.html">Mesos + CNI</a></li>
+      <li><a href="/deployment/mesos-marathon.html">Mesos + Marathon</a></li>
+      <li><a href="/deployment/minimesos-marathon.html">Minimesos + Marathon</a></li>
+    </ul>
+  </li>
+  <li><span>Nomad</span>
+    <ul>
+      <li><a href="/deployment/nomad.html">Nomad</a></li>
+    </ul>
+  </li>
+  <li><span>Apcera</span>
+    <ul>
+      <li><a href="/deployment/apcera.html">Apcera</a></li>
+    </ul>
+  </li>
+  <li><span>Monitoring</span>
+    <ul>
+      <li><a href="/deployment/monitoring-kubernetes.html">Kubernetes</a></li>
+      <li><a href="/deployment/monitoring-docker-compose.html">Docker Compose</a></li>
+    </ul>
+  </li>
+</ul>
+
+          </div>
+          <div class="col-sm-9">
+            <h2 id="micro-sock-on-docker-compose-and-weave-cloud">Micro Sock on Docker Compose and Weave Cloud</h2>
+
+<p>Micro Sock is a small application that simulates a microservice. It listens for connections and initiates connection to other services specified as a parameter on the command line, and exchanges messages with those services. It is ideal for building a quick topology of services that talk to each other.</p>
+
+<p>The instructions on this page will allow you to get started with a Docker Compose setup that uses multiple micro-sock containers to build a topology that resembles the other Sock Shop deployments. The advantage is that that the required download is only 5 MB and the whole setup starts very fast.</p>
+
+<h3 id="pre-requisites">Pre-requisites</h3>
+
+<ul>
+  <li>Install <a href="https://www.docker.com/products/overview">Docker</a></li>
+  <li>Install <a href="https://docs.docker.com/compose/install/">Docker Compose</a></li>
+  <li>Install <a href="https://www.weave.works/install-weave-scope/">Weave Scope</a></li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/microservices-demo/microservices-demo
+cd microservices-demo
+</code></pre>
+</div>
+<!-- deploy-doc-hidden pre-install
+
+    curl -sSL https://get.docker.com/ | sh
+    apt-get install -yq python-pip build-essential python-dev
+    pip install docker-compose
+
+-->
+
+<h3 id="launch-weave-scope">Launch Weave Scope</h3>
+
+<p>Get a token by <a href="http://cloud.weave.works/">registering on Weave Cloud</a>. Once you have the token you can download and start the Scope instance.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo curl -L git.io/scope -o /usr/local/bin/scope
+sudo chmod a+x /usr/local/bin/scope
+scope launch --service-token=&lt;token&gt;
+</code></pre>
+</div>
+
+<h3 id="provision-infrastructure">Provision infrastructure</h3>
+
+<!-- deploy-doc-start create-infrastructure -->
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -f deploy/micro-sock/docker-compose.yaml up -d
+</code></pre>
+</div>
+
+<!-- deploy-doc-end -->
+
+<h3 id="check-weave-cloud">Check Weave Cloud</h3>
+
+<p>Once you started the application using Docker Compose, you can visit <a href="http://cloud.weave.works/">Weave Cloud</a> to see how the containers are connected to each other. You should be seeing something like this:</p>
+
+<p><img src="https://github.com/microservices-demo/microservices-demo.github.io/raw/master/assets/micro-sock-scope.png" alt="Micro Sock in Scope" /></p>
+
+<h3 id="cleaning-up">Cleaning up</h3>
+
+<!-- deploy-doc-start destroy-infrastructure -->
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -f deploy/micro-sock/docker-compose.yaml down
+</code></pre>
+</div>
+
+<!-- deploy-doc-end -->
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer">
+        <p>&copy;2017 <a href="http://weave.works/" target="_blank">Weaveworks, Inc</a></p>
+      </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-57286487-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
